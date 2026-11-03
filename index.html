@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis IPA Kelas 8: Pewarisan Sifat & Bioteknologi</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-body: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --success-bg: #dcfce7;
+            --success-border: #16a34a;
+            --error-bg: #fee2e2;
+            --error-border: #dc2626;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+        }
+
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.6rem;
+            color: #0f172a;
+        }
+
+        p.subtitle {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .result-panel {
+            display: none;
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+            background: #eff6ff;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        .result-score {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 6px 0;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .badge-gen { background: #e0e7ff; color: #3730a3; }
+        .badge-bio { background: #dcfce7; color: #166534; }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            color: #0f172a;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: background-color 0.15s ease, border-color 0.15s ease;
+            background-color: #ffffff;
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+        }
+
+        .option-label.correct-ans {
+            background-color: var(--success-bg) !important;
+            border-color: var(--success-border) !important;
+            font-weight: 600;
+        }
+
+        .option-label.wrong-ans {
+            background-color: var(--error-bg) !important;
+            border-color: var(--error-border) !important;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 32px 0 60px 0;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+
+        .btn-submit { background-color: var(--primary); color: white; }
+        .btn-reset { background-color: #cbd5e1; color: #334155; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Evaluasi IPA Kelas 8 SMP</h1>
+        <p class="subtitle">Materi: Pewarisan Sifat & Bioteknologi (30 Soal Pilihan Ganda)</p>
+    </header>
+
+    <div id="resultPanel" class="result-panel">
+        <div>Skor Akhir Anda:</div>
+        <div id="scoreText" class="result-score">0 / 100</div>
+        <div id="detailText"></div>
+    </div>
+
+    <form id="quizForm">
+
+        <!-- KELOMPOK 1: PEWARISAN SIFAT (SOAL 1 - 15) -->
+
+        <div class="question-card" id="qcard-0">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">1. Bagian sel yang berperan sebagai pembawa informasi genetik dari orang tua kepada keturunannya adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q0" value="0"> Ribosom</label>
+                <label class="option-label"><input type="radio" name="q0" value="1"> Kromosom</label>
+                <label class="option-label"><input type="radio" name="q0" value="2"> Kloroplas</label>
+                <label class="option-label"><input type="radio" name="q0" value="3"> Mitokondria</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-1">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">2. Unit terkecil penentu sifat keturunan yang terletak pada lokus tertentu di dalam kromosom dinamakan...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q1" value="0"> Gen</label>
+                <label class="option-label"><input type="radio" name="q1" value="1"> RNA</label>
+                <label class="option-label"><input type="radio" name="q1" value="2"> Enzim</label>
+                <label class="option-label"><input type="radio" name="q1" value="3"> Hormon</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-2">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">3. Pasangan gen yang terletak pada lokus yang bersesuaian pada kromosom homolog disebut...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q2" value="0"> Alel</label>
+                <label class="option-label"><input type="radio" name="q2" value="1"> Fenotipe</label>
+                <label class="option-label"><input type="radio" name="q2" value="2"> Genotipe</label>
+                <label class="option-label"><input type="radio" name="q2" value="3"> Hibrid</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-3">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">4. Sifat atau karakteristik fisik yang tampak dari luar pada suatu individu disebut...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q3" value="0"> Genotipe</label>
+                <label class="option-label"><input type="radio" name="q3" value="1"> Fenotipe</label>
+                <label class="option-label"><input type="radio" name="q3" value="2"> Karyotype</label>
+                <label class="option-label"><input type="radio" name="q3" value="3"> Gamet</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-4">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">5. Pasangan alel yang terdiri atas dua gen yang identik (misalnya AA atau aa) dinamakan genotipe...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q4" value="0"> Heterozigot</label>
+                <label class="option-label"><input type="radio" name="q4" value="1"> Homozigot</label>
+                <label class="option-label"><input type="radio" name="q4" value="2"> Intermediet</label>
+                <label class="option-label"><input type="radio" name="q4" value="3"> Resesif</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-5">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">6. Jenis kromosom yang berfungsi menentukan jenis kelamin pada manusia adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q5" value="0"> Autosom</label>
+                <label class="option-label"><input type="radio" name="q5" value="1"> Gonosom</label>
+                <label class="option-label"><input type="radio" name="q5" value="2"> Centrosom</label>
+                <label class="option-label"><input type="radio" name="q5" value="3"> Ribosom</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-6">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">7. Jumlah pasang kromosom tubuh (autosom) pada sel tubuh (somatis) manusia yang normal adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q6" value="0"> 22 pasang</label>
+                <label class="option-label"><input type="radio" name="q6" value="1"> 23 pasang</label>
+                <label class="option-label"><input type="radio" name="q6" value="2"> 44 pasang</label>
+                <label class="option-label"><input type="radio" name="q6" value="3"> 46 pasang</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-7">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">8. Persilangan antara dua individu yang hanya memperhatikan satu sifat beda disebut persilangan...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q7" value="0"> Dihibrid</label>
+                <label class="option-label"><input type="radio" name="q7" value="1"> Monohibrid</label>
+                <label class="option-label"><input type="radio" name="q7" value="2"> Trihibrid</label>
+                <label class="option-label"><input type="radio" name="q7" value="3"> Polihibrid</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-8">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">9. Tanaman ercis berbiji bulat (BB) disilangkan dengan berbiji keriput (bb). Jika bulat dominan penuh terhadap keriput, maka fenotipe F1 adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q8" value="0"> 100% Berbiji keriput</label>
+                <label class="option-label"><input type="radio" name="q8" value="1"> 100% Berbiji bulat</label>
+                <label class="option-label"><input type="radio" name="q8" value="2"> 50% Bulat, 50% Keriput</label>
+                <label class="option-label"><input type="radio" name="q8" value="3"> 75% Bulat, 25% Keriput</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-9">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">10. Perbandingan fenotipe keturunan F2 pada persilangan monohibrid dominan penuh antara sesama heterozigot (Aa x Aa) adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q9" value="0"> 1 : 2 : 1</label>
+                <label class="option-label"><input type="radio" name="q9" value="1"> 3 : 1</label>
+                <label class="option-label"><input type="radio" name="q9" value="2"> 9 : 3 : 3 : 1</label>
+                <label class="option-label"><input type="radio" name="q9" value="3"> 1 : 1</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-10">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">11. Bunga merah (MM) disilangkan dengan bunga putih (mm) menghasilkan F1 berwarna merah muda (Mm). Jika F1 disilangkan sesamanya, rasio fenotipe F2 adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q10" value="0"> Merah : Putih = 3 : 1</label>
+                <label class="option-label"><input type="radio" name="q10" value="1"> Merah : Merah Muda : Putih = 1 : 2 : 1</label>
+                <label class="option-label"><input type="radio" name="q10" value="2"> Merah Muda : Putih = 2 : 1</label>
+                <label class="option-label"><input type="radio" name="q10" value="3"> Semua berbunga Merah Muda</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-11">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">12. Persilangan dihibrid heterozigot penuh (AaBb x AaBb) menghasilkan keturunan F2 dengan perbandingan fenotipe...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q11" value="0"> 1 : 2 : 1</label>
+                <label class="option-label"><input type="radio" name="q11" value="1"> 3 : 1</label>
+                <label class="option-label"><input type="radio" name="q11" value="2"> 9 : 3 : 3 : 1</label>
+                <label class="option-label"><input type="radio" name="q11" value="3"> 1 : 1 : 1 : 1</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-12">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">13. Hemofilia merupakan penyakit keturunan berupa darah sulit membeku yang diturunkan melalui...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q12" value="0"> Autosom dominan</label>
+                <label class="option-label"><input type="radio" name="q12" value="1"> Autosom resesif</label>
+                <label class="option-label"><input type="radio" name="q12" value="2"> Gen resesif tertaut kromosom X</label>
+                <label class="option-label"><input type="radio" name="q12" value="3"> Gen tertaut kromosom Y</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-13">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">14. Pasangan suami istri bergolongan darah A heterozigot (I<sup>A</sup>I<sup>O</sup>) berpeluang memiliki anak bergolongan darah O sebesar...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q13" value="0"> 0%</label>
+                <label class="option-label"><input type="radio" name="q13" value="1"> 25%</label>
+                <label class="option-label"><input type="radio" name="q13" value="2"> 50%</label>
+                <label class="option-label"><input type="radio" name="q13" value="3"> 75%</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-14">
+            <span class="badge badge-gen">Pewarisan Sifat</span>
+            <div class="question-text">15. Kelainan genetik yang ditandai dengan tidak terbentuknya pigmen melanin pada kulit dan rambut dinamakan...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q14" value="0"> Anemia</label>
+                <label class="option-label"><input type="radio" name="q14" value="1"> Albinisme</label>
+                <label class="option-label"><input type="radio" name="q14" value="2"> Leukemia</label>
+                <label class="option-label"><input type="radio" name="q14" value="3"> Thalasemia</label>
+            </div>
+        </div>
+
+        <!-- KELOMPOK 2: BIOTEKNOLOGI (SOAL 16 - 30) -->
+
+        <div class="question-card" id="qcard-15">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">16. Penerapan bioteknologi yang menggunakan mikroorganisme secara langsung tanpa mengubah struktur genetiknya disebut bioteknologi...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q15" value="0"> Modern</label>
+                <label class="option-label"><input type="radio" name="q15" value="1"> Konvensional</label>
+                <label class="option-label"><input type="radio" name="q15" value="2"> Rekayasa Genetik</label>
+                <label class="option-label"><input type="radio" name="q15" value="3"> Molekuler</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-16">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">17. Jamur yang dimanfaatkan dalam pembuatan tempe dari bahan dasar kedelai adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q16" value="0"> Rhizopus oryzae</label>
+                <label class="option-label"><input type="radio" name="q16" value="1"> Saccharomyces cerevisiae</label>
+                <label class="option-label"><input type="radio" name="q16" value="2"> Neurospora crassa</label>
+                <label class="option-label"><input type="radio" name="q16" value="3"> Aspergillus niger</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-17">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">18. Pada pembuatan adonan roti, Saccharomyces cerevisiae menghasilkan gas yang dapat mengembangkannya, yaitu...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q17" value="0"> Oksigen (O<sub>2</sub>)</label>
+                <label class="option-label"><input type="radio" name="q17" value="1"> Karbon dioksida (CO<sub>2</sub>)</label>
+                <label class="option-label"><input type="radio" name="q17" value="2"> Nitrogen (N<sub>2</sub>)</label>
+                <label class="option-label"><input type="radio" name="q17" value="3"> Hidrogen (H<sub>2</sub>)</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-18">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">19. Bakteri yang berperan dalam mengasamkan susu pada fermentasi pembuatan yoghurt adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q18" value="0"> Acetobacter xylinum</label>
+                <label class="option-label"><input type="radio" name="q18" value="1"> Lactobacillus bulgaricus</label>
+                <label class="option-label"><input type="radio" name="q18" value="2"> Escherichia coli</label>
+                <label class="option-label"><input type="radio" name="q18" value="3"> Rhizopus stolonifer</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-19">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">20. Pembuatan makanan Nata de coco dari air kelapa dibantu oleh mikroorganisme jenis...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q19" value="0"> Acetobacter xylinum</label>
+                <label class="option-label"><input type="radio" name="q19" value="1"> Spirulina sp.</label>
+                <label class="option-label"><input type="radio" name="q19" value="2"> Chlorella sp.</label>
+                <label class="option-label"><input type="radio" name="q19" value="3"> Penicillium notatum</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-20">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">21. Jamur yang digunakan dalam pembuatan oncom merah dari ampas tahu adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q20" value="0"> Aspergillus oryzae</label>
+                <label class="option-label"><input type="radio" name="q20" value="1"> Neurospora crassa</label>
+                <label class="option-label"><input type="radio" name="q20" value="2"> Rhizopus stolonifer</label>
+                <label class="option-label"><input type="radio" name="q20" value="3"> Saccharomyces bayanus</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-21">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">22. Produksi hormon insulin sintetik bagi penderita diabetes melitus menggunakan teknik bioteknologi modern berupa...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q21" value="0"> Kultur jaringan</label>
+                <label class="option-label"><input type="radio" name="q21" value="1"> Kloning organ</label>
+                <label class="option-label"><input type="radio" name="q21" value="2"> Rekayasa genetik / Rekombinasi DNA</label>
+                <label class="option-label"><input type="radio" name="q21" value="3"> Inseminasi buatan</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-22">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">23. Teknik perbanyakan tanaman secara cepat dan steril dengan memanfaat potongan sel/jaringan tumbuhan dinamakan...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q22" value="0"> Kultur jaringan</label>
+                <label class="option-label"><input type="radio" name="q22" value="1"> Hibridoma</label>
+                <label class="option-label"><input type="radio" name="q22" value="2"> Transplantasi inti</label>
+                <label class="option-label"><input type="radio" name="q22" value="3"> Stek batang</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-23">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">24. Dasar ilmiah teknik kultur jaringan adalah kemampuan sel tumbuhan untuk tumbuh menjadi individu baru secara utuh yang disebut sifat...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q23" value="0"> Spesialisasi</label>
+                <label class="option-label"><input type="radio" name="q23" value="1"> Totipotensi</label>
+                <label class="option-label"><input type="radio" name="q23" value="2"> Regenerasi</label>
+                <label class="option-label"><input type="radio" name="q23" value="3"> Morphogenesis</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-24">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">25. Bakteri Bacillus thuringiensis banyak dimanfaatkan dalam bidang pertanian bioteknologi sebagai...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q24" value="0"> Pupuk nitrogen</label>
+                <label class="option-label"><input type="radio" name="q24" value="1"> Biopestisida pembasmi hama</label>
+                <label class="option-label"><input type="radio" name="q24" value="2"> Hormon pertumbuhan tanaman</label>
+                <label class="option-label"><input type="radio" name="q24" value="3"> Pengurai sampah plastik</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-25">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">26. Penggunaan mikroorganisme untuk membersihkan wilayah yang tercemar limbah atau minyak bumi disebut...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q25" value="0"> Bioremediasi</label>
+                <label class="option-label"><input type="radio" name="q25" value="1"> Bioakumulasi</label>
+                <label class="option-label"><input type="radio" name="q25" value="2"> Biomagnifikasi</label>
+                <label class="option-label"><input type="radio" name="q25" value="3"> Biorefleksi</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-26">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">27. Penggabungan antara sel limfosit B penghasil antibodi dengan sel kanker untuk menghasilkan antibodi monoklonal dinamakan teknik...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q26" value="0"> Hibridoma</label>
+                <label class="option-label"><input type="radio" name="q26" value="1"> Plasmid</label>
+                <label class="option-label"><input type="radio" name="q26" value="2"> Kloning</label>
+                <label class="option-label"><input type="radio" name="q26" value="3"> Fermentasi</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-27">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">28. Organisme yang susunan genetiknya telah diubah dengan menyisipkan gen asing dari spesies lain dinamakan organisme...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q27" value="0"> Hibrida</label>
+                <label class="option-label"><input type="radio" name="q27" value="1"> Mutan</label>
+                <label class="option-label"><input type="radio" name="q27" value="2"> Transgenik</label>
+                <label class="option-label"><input type="radio" name="q27" value="3"> Kloning</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-28">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">29. Produk bioteknologi kesehatan yang dibuat untuk merangsang pembentukan sistem kekebalan tubuh terhadap serangan patogen adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q28" value="0"> Antibiotik</label>
+                <label class="option-label"><input type="radio" name="q28" value="1"> Vaksin</label>
+                <label class="option-label"><input type="radio" name="q28" value="2"> Vitamin</label>
+                <label class="option-label"><input type="radio" name="q28" value="3"> Analgesik</label>
+            </div>
+        </div>
+
+        <div class="question-card" id="qcard-29">
+            <span class="badge badge-bio">Bioteknologi</span>
+            <div class="question-text">30. Salah satu kekhawatiran dampak negatif pelepasan tanaman transgenik terhadap keanekaragaman hayati adalah...</div>
+            <div class="options-group">
+                <label class="option-label"><input type="radio" name="q29" value="0"> Menurunkan kesuburan tanah</label>
+                <label class="option-label"><input type="radio" name="q29" value="1"> Menumpas seluruh mikroorganisme tanah</label>
+                <label class="option-label"><input type="radio" name="q29" value="2"> Terdesaknya varietas lokal / penurunan keanekaragaman genetik</label>
+                <label class="option-label"><input type="radio" name="q29" value="3"> Meningkatnya suhu udara sekitar lahan pertanian</label>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn-submit" onclick="checkAnswers()">Periksa Jawaban</button>
+            <button type="button" class="btn-reset" onclick="resetQuiz()">Reset Kuis</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Kunci jawaban (indeks 0=A, 1=B, 2=C, 3=D)
+    const key = [
+        1, 0, 0, 1, 1, 1, 0, 1, 1, 1,
+        1, 2, 2, 1, 1, 1, 0, 1, 1, 0,
+        1, 2, 0, 1, 1, 0, 0, 2, 1, 2
+    ];
+
+    function checkAnswers() {
+        let score = 0;
+        let answeredCount = 0;
+
+        for (let i = 0; i < 30; i++) {
+            const options = document.getElementsByName('q' + i);
+            const card = document.getElementById('qcard-' + i);
+            let selected = -1;
+
+            // Bersihkan gaya sebelumnya
+            for (let opt of options) {
+                opt.parentElement.classList.remove('correct-ans', 'wrong-ans');
+                if (opt.checked) {
+                    selected = parseInt(opt.value);
+                }
+            }
+
+            if (selected !== -1) {
+                answeredCount++;
+                if (selected === key[i]) {
+                    score++;
+                    options[selected].parentElement.classList.add('correct-ans');
+                } else {
+                    options[selected].parentElement.classList.add('wrong-ans');
+                    options[key[i]].parentElement.classList.add('correct-ans');
+                }
+            } else {
+                // Tampilkan jawaban benar jika tidak dijawab
+                options[key[i]].parentElement.classList.add('correct-ans');
+            }
+        }
+
+        const finalScore = Math.round((score / 30) * 100);
+        const resultPanel = document.getElementById('resultPanel');
+        const scoreText = document.getElementById('scoreText');
+        const detailText = document.getElementById('detailText');
+
+        resultPanel.style.display = 'block';
+        scoreText.innerText = finalScore + ' / 100';
+        detailText.innerText = `Anda menjawab benar ${score} dari 30 soal (Terjawab: ${answeredCount}/30).`;
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetQuiz() {
+        document.getElementById('quizForm').reset();
+        document.getElementById('resultPanel').style.display = 'none';
+
+        for (let i = 0; i < 30; i++) {
+            const options = document.getElementsByName('q' + i);
+            for (let opt of options) {
+                opt.parentElement.classList.remove('correct-ans', 'wrong-ans');
+            }
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
